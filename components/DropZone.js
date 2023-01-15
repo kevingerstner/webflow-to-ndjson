@@ -3,7 +3,7 @@ import FilePreview from "./filePreview";
 export default function DropZone() {
 	return (
 		<>
-			<div>
+			<div className="max-w-lg">
 				<label
 					htmlFor="fileSelect"
 					class="flex h-32 w-full cursor-pointer appearance-none justify-center rounded-md border-2 border-dashed border-gray-300 bg-white px-4 transition hover:border-gray-400"

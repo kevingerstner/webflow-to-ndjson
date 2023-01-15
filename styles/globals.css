@@ -1,9 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Sofia+Sans&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-	h1 {
-		@apply text-4xl;
-	}
+  html {
+    @apply bg-gray-50;
+    @apply text-gray-700;
+  }
+  h1 {
+    @apply text-5xl;
+  }
 }

@@ -9,6 +9,9 @@ module.exports = {
 		container: {
 			center: true,
 		},
+		fontFamily: {
+			display: ["Sofia Sans", "sans-serif"],
+		},
 		extend: {},
 	},
 	plugins: [],
