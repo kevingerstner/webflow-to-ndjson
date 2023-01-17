@@ -1,19 +1,16 @@
 export default function FilePreview({ fileData }) {
+
 	return (
-		<div>
+		<div className="p-5 bg-slate-500">
+			<p>Test element</p>
 			<div>
-				{fileData &&
-					fileData.fileList.map((f) => {
-						return (
-							<>
-								<ol>
-									<li key={f.lastModified}>
-										<div key={f.name}>{f.name}</div>
-									</li>
-								</ol>
-							</>
-						);
-					})}
+				<p>{fileData}</p>
+				{fileData && (
+					<>
+						<h3>{fileData.name}</h3>
+						<h3>{fileData.lastModified}</h3>
+					</>
+				)}
 			</div>
 		</div>
 	);

@@ -10,7 +10,9 @@ module.exports = {
 			center: true,
 		},
 		fontFamily: {
-			display: ["Sofia Sans", "sans-serif"],
+			sans: ["Sofia Sans", "sans-serif"],
+			display: ['Fredoka One', "cursive"],
+			mono: ["PT Mono", "monospace"],
 		},
 		extend: {},
 	},

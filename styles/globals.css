@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Sofia+Sans&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&family=PT+Mono&family=Sofia+Sans&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,6 +9,21 @@
     @apply text-gray-700;
   }
   h1 {
+    @apply font-display;
     @apply text-5xl;
+  }
+  h2 {
+    @apply text-2xl;
+    @apply font-semibold;
+    @apply font-sans;
+    @apply pb-5;
+  }
+  .text-overline {
+    @apply font-mono;
+    @apply text-sm;
+    @apply tracking-widest;
+    @apply text-blue-600;
+    @apply mb-3;
+    @apply uppercase;
   }
 }
