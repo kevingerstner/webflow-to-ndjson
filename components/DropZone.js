@@ -1,13 +1,11 @@
-import FilePreview from "./filePreview";
-
 export default function DropZone({ handler }) {
 
 	return (
 		<>
-			<div className="max-w-lg">
+			<div className="">
 				<label
 					htmlFor="fileSelect"
-					className="flex h-32 w-full cursor-pointer appearance-none justify-center rounded-md border-2 border-dashed border-gray-300 bg-white px-4 transition hover:border-gray-400"
+					className="flex h-64 w-full cursor-pointer appearance-none justify-center rounded-md border-2 border-dashed border-gray-300 bg-white px-4 transition hover:border-gray-400"
 				>
 					<span className="flex items-center space-x-2">
 						<svg

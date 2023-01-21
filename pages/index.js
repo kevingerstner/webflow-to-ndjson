@@ -1,23 +1,27 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
-import DropZone from "../components/DropZone";
-import Navbar from "../components/Navbar";
+import { parse } from "papaparse";
+import DropZone from "../components/dropZone";
+import Navbar from "../components/navbar";
 import FilePreview from "../components/filePreview";
 
-export default function Home() {
+export default function Index() {
 	const [fileUpload, setFile] = useState("");
+	const [fileData, setFileData] = useState("");
 
-	function handleFileChosen(event) {
+	const handleFileChosen = useCallback((event) => {
 		let file = event.target.files[0];
-		let reader = new FileReader();
-		reader.onload = (e) => {
-			const content = reader.result;
-			setFile(content);
-			console.log(content);
-		};
-		reader.readAsText(file);
-	}
+		console.log(file);
+		setFile(file);
+
+		parse(file, {
+			complete: function (results) {
+				console.log(results);
+				setFileData(results);
+			}
+		});
+	}, [setFileData]);
 
 	return (
 		<>
@@ -36,7 +40,7 @@ export default function Home() {
 							<h1 className="mb-3">Webflow CMS to Sanity CMS</h1>
 							<p className="text-xl mb-6 text-gray-400">Converts .csv to .ndjson</p>
 							<div className="max-w-2xl">
-								<p>Ready to get a restraining order from Webflow CMS and move your data to a real CMS like Sanity? This tool will convert Webflow's exported .csv file to .ndjson, the supported file format for Sanity. </p>
+								<p>Want to move your data from a Webflow CMS to a headless CMS like Sanity? This tool will convert Webflow's exported .csv file to .ndjson, the supported file format for Sanity. </p>
 							</div>
 
 						</div>
@@ -44,7 +48,6 @@ export default function Home() {
 							<h2>Step 1) Upload CSV File:</h2>
 							<form className="pb-10">
 								<DropZone handler={handleFileChosen} />
-								<button type="submit">Submit</button>
 							</form>
 						</div>
 					</div>
@@ -52,7 +55,7 @@ export default function Home() {
 				<section className="py-5">
 					<div className="container">
 						<h2>Step 2) View Data:</h2>
-						<FilePreview fileData={fileUpload} />
+						<FilePreview file={fileUpload} fileData={fileData} />
 						<hr className="my-10" />
 					</div>
 				</section>
