@@ -2,6 +2,7 @@ import FilePreview from "../components/filePreview";
 import DropZone from "../components/dropZone";
 import { parse } from "papaparse";
 import { useCallback, useState, useEffect } from "react";
+import JSONPreview from "./jsonPreview";
 
 export default function CSVForm() {
 
@@ -17,6 +18,7 @@ export default function CSVForm() {
 
         parse(file, {
             worker: true,
+            header: true,
             skipEmptyLines: true,
             complete: function (results) {
                 console.log(results);
@@ -50,6 +52,12 @@ export default function CSVForm() {
                 <div className="container">
                     <h2>Step 2) View Data:</h2>
                     <FilePreview file={fileUpload} fileData={fileData} />
+                </div>
+            </section>
+            <section className="py-5">
+                <div className="container">
+                    <h2>Step 3) Preview Data:</h2>
+                    <JSONPreview fileData={fileData} />
                     <hr className="my-10" />
                 </div>
             </section>
