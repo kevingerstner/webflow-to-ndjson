@@ -12,16 +12,16 @@ export default function JSONPreview({ fileData, type }) {
         Prism.highlightAll();
     }, [fileData, mode]);
 
-    let preview1 = fileData?.slice(0, 50);
-    let previewString = "";
-    preview1?.forEach((row) => {
-        previewString += (JSON.stringify(row) + "\n");
+    let ndjsonPreview = fileData?.slice(0, 50);
+    let ndjsonPreviewString = "";
+    ndjsonPreview?.forEach((row) => {
+        ndjsonPreviewString += (JSON.stringify(row) + "\n");
     })
 
-    let preview2 = fileData?.slice(0, 5);
-    let preview2String = "";
-    preview2?.forEach(row => {
-        preview2String += (JSON.stringify(row, null, 2));
+    let jsonPreview = fileData?.slice(0, 5);
+    let jsonPreviewString = "";
+    jsonPreview?.forEach(row => {
+        jsonPreviewString += (JSON.stringify(row, null, 2));
     });
 
     let btnClass = classNames("p-3 rounded-t-lg", {
@@ -41,25 +41,18 @@ export default function JSONPreview({ fileData, type }) {
 
             <button className={btnClass} onClick={() => { setMode("ndjson") }}>NDJSON (Output)</button>
             <button className={btnClass2} onClick={() => { setMode("json") }}>JSON (Formatted)</button>
-            {
-                mode === "ndjson" && (
-                    <pre>
+            <pre>
+                {
+                    mode === "ndjson" ? (
                         <code className="language-javascript">
-                            {previewString}
+                            {ndjsonPreviewString}
                         </code>
-                    </pre>
-                )
-            }
-            {
-                mode === "json" && (
-                    <pre>
+                    ) : mode === "json" ? (
                         <code className="language-javascript">
-                            {preview2String}
-                        </code>
-                    </pre>
-                )
-            }
-
+                            {jsonPreviewString}
+                        </code>) : null
+                }
+            </pre>
         </>
     )
 }
