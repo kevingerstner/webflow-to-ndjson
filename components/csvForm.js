@@ -15,7 +15,6 @@ export default function CSVForm() {
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
-        console.log(file);
         setFile(file);
 
         parse(file, {
@@ -23,8 +22,6 @@ export default function CSVForm() {
             header: true,
             skipEmptyLines: true,
             complete: function (results) {
-                console.log(results);
-
                 setFileData(results.data);
                 setConvertedData(results.data);
                 setUploadInfo(results.meta);
@@ -33,6 +30,7 @@ export default function CSVForm() {
         });
     }, [setFileData]);
 
+    // Modify the JSON Converted Data
     function handleTypeSubmit(event) {
         event.preventDefault();
         if (!convertedData) return;
@@ -88,7 +86,6 @@ export default function CSVForm() {
             </section>
             <section className="py-5">
                 <div className="container">
-                    <h2>Step 3) Preview Data in NDJSON format:</h2>
                     <JSONPreview fileData={convertedData} type={type} />
                     <hr className="my-10" />
                 </div>
