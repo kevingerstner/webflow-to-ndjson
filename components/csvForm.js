@@ -6,10 +6,12 @@ import JSONPreview from "./jsonPreview";
 
 export default function CSVForm() {
 
-    const [fileUpload, setFile] = useState("");
-    const [fileData, setFileData] = useState("");
-
-    let fileLoadCache = [];
+    const [fileUpload, setFile] = useState(null);
+    const [uploadInfo, setUploadInfo] = useState(null);
+    const [uploadErrors, setUploadErrors] = useState(null);
+    const [fileData, setFileData] = useState(null);
+    const [type, setType] = useState("");
+    const [convertedData, setConvertedData] = useState(null);
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
@@ -22,10 +24,30 @@ export default function CSVForm() {
             skipEmptyLines: true,
             complete: function (results) {
                 console.log(results);
-                setFileData(results);
+
+                setFileData(results.data);
+                setConvertedData(results.data);
+                setUploadInfo(results.meta);
+                setUploadErrors(results.errors);
             }
         });
     }, [setFileData]);
+
+    function handleTypeSubmit(event) {
+        event.preventDefault();
+        if (!convertedData) return;
+
+        let newData = [];
+
+        convertedData.forEach((row) => {
+            let keys = Object.keys(row);
+            row["_type"] = type;
+            // Put _type at the beginning of the JSON object for pretty printing
+            newData.push(JSON.parse(JSON.stringify(row, ["_type", ...keys])));
+        });
+        console.log(newData);
+        setConvertedData(newData);
+    }
 
     return (
         <>
@@ -51,13 +73,23 @@ export default function CSVForm() {
             <section className="py-5">
                 <div className="container">
                     <h2>Step 2) View Data:</h2>
-                    <FilePreview file={fileUpload} fileData={fileData} />
+                    <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} />
                 </div>
             </section>
             <section className="py-5">
                 <div className="container">
-                    <h2>Step 3) Preview Data:</h2>
-                    <JSONPreview fileData={fileData} />
+                    <h2>Step 3) Input Info</h2>
+                    <form onSubmit={handleTypeSubmit}>
+                        <label className="mr-2">Input the type name for the target Sanity collection: </label>
+                        <input type="text" id="type" name="type" className="border border-gray-400 px-3 py-1 rounded-md" onChange={(e) => { setType(e.target.value) }} /><br />
+                        <button type="submit" className="bg-blue-500 rounded-md mt-5 py-2 px-5 text-white font-bold hover:bg-blue-300 transition-colors">Submit</button>
+                    </form>
+                </div>
+            </section>
+            <section className="py-5">
+                <div className="container">
+                    <h2>Step 3) Preview Data in NDJSON format:</h2>
+                    <JSONPreview fileData={convertedData} type={type} />
                     <hr className="my-10" />
                 </div>
             </section>

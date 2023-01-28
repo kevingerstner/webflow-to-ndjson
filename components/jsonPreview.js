@@ -1,16 +1,17 @@
-export default function JSONPreview({ fileData }) {
+export default function JSONPreview({ fileData, type }) {
 
-    let fileDataPreview = fileData?.data?.slice(0, 50);
+    let fileDataPreview = fileData?.slice(0, 50);
 
     return (
         <>
-            {fileDataPreview?.forEach((row) => (
-                <pre>
-                    <code>
-                        <p>{JSON.stringify(row)}</p>
-                    </code>
-                </pre>
-            ))}
+            <pre className="border border-blue-500 rounded-md overflow-scroll p-5">
+                <code>
+                    {fileDataPreview?.map((row, index) => (
+                        <p key={index}>{JSON.stringify(row)}</p>
+                    ))}
+                </code>
+            </pre>
+
         </>
     )
 }
