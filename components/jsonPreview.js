@@ -8,16 +8,20 @@ import "prismjs/components/prism-javascript.min";
 export default function JSONPreview({ fileData, settings }) {
 
     let [mode, setMode] = useState("ndjson");
-    let type = settings?.type;
+    let type = settings?._type;
+    let idCol = settings?._id;
     let convertedData = [];
+
+    console.log("ID", idCol);
 
     // Create the converted preview
     fileData?.slice(0, 10).forEach((row) => {
         let convertedRow = _.cloneDeep(row);
         let keys = Object.keys(convertedRow);
+        convertedRow["_id"] = idCol;
         convertedRow["_type"] = type;
         // Put _type at the beginning of the JSON object for pretty printing
-        convertedData.push(JSON.parse(JSON.stringify(convertedRow, ["_type", ...keys])));
+        convertedData.push(JSON.parse(JSON.stringify(convertedRow, ["_id", "_type", ...keys])));
     });
 
     useEffect(() => {

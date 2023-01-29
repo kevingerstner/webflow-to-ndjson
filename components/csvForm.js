@@ -12,7 +12,8 @@ export default function CSVForm() {
     const [fileData, setFileData] = useState(null);
 
     const [settings, setSettings] = useState("");
-    const [type, setType] = useState("");
+    const [type, setType] = useState(""); // the _type field for Sanity (the name)
+    const [idColumn, setIdColumn] = useState(0); // the column containing the document ID
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
@@ -30,11 +31,14 @@ export default function CSVForm() {
         });
     }, [setFileData]);
 
+    function handleChangeIdColumn(event) {
+        setSettings({ ...settings, _id: event.target.value })
+    }
+
     // Modify the JSON Converted Data
     function handleTypeSubmit(event) {
         event.preventDefault();
-
-        setSettings({ type });
+        setSettings({ ...settings, _type: type });
     }
 
     return (
@@ -61,7 +65,8 @@ export default function CSVForm() {
             <section className="py-5">
                 <div className="container">
                     <h2>Step 2) View Data:</h2>
-                    <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} />
+                    <h1>ID Column: {idColumn}</h1>
+                    <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} idColumnHandler={handleChangeIdColumn} />
                 </div>
             </section>
             <section className="py-5">
