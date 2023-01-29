@@ -1,26 +1,38 @@
 import { useEffect, useState } from "react";
+import _ from "lodash";
 import classNames from "classnames";
 import Prism from "prismjs";
 import "prismjs/components/prism-jsx.min";
 import "prismjs/components/prism-javascript.min";
 
-export default function JSONPreview({ fileData, type }) {
+export default function JSONPreview({ fileData, settings }) {
 
     let [mode, setMode] = useState("ndjson");
+    let type = settings?.type;
+    let convertedData = [];
+
+    // Create the converted preview
+    fileData?.slice(0, 10).forEach((row) => {
+        let convertedRow = _.cloneDeep(row);
+        let keys = Object.keys(convertedRow);
+        convertedRow["_type"] = type;
+        // Put _type at the beginning of the JSON object for pretty printing
+        convertedData.push(JSON.parse(JSON.stringify(convertedRow, ["_type", ...keys])));
+    });
 
     useEffect(() => {
         Prism.highlightAll();
-    }, [fileData, mode]);
+    }, [fileData, settings, mode]);
 
-    let ndjsonPreview = fileData?.slice(0, 50);
+    // Display the converted preview data in ndjson (output) format
     let ndjsonPreviewString = "";
-    ndjsonPreview?.forEach((row) => {
+    convertedData?.forEach((row) => {
         ndjsonPreviewString += (JSON.stringify(row) + "\n");
     })
 
-    let jsonPreview = fileData?.slice(0, 5);
+    // Display the converted preview data in json (formatted) format
     let jsonPreviewString = "";
-    jsonPreview?.forEach(row => {
+    convertedData?.forEach(row => {
         jsonPreviewString += (JSON.stringify(row, null, 2));
     });
 

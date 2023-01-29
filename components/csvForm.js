@@ -10,8 +10,9 @@ export default function CSVForm() {
     const [uploadInfo, setUploadInfo] = useState(null);
     const [uploadErrors, setUploadErrors] = useState(null);
     const [fileData, setFileData] = useState(null);
+
+    const [settings, setSettings] = useState("");
     const [type, setType] = useState("");
-    const [convertedData, setConvertedData] = useState(null);
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
@@ -23,7 +24,6 @@ export default function CSVForm() {
             skipEmptyLines: true,
             complete: function (results) {
                 setFileData(results.data);
-                setConvertedData(results.data);
                 setUploadInfo(results.meta);
                 setUploadErrors(results.errors);
             }
@@ -33,18 +33,8 @@ export default function CSVForm() {
     // Modify the JSON Converted Data
     function handleTypeSubmit(event) {
         event.preventDefault();
-        if (!convertedData) return;
 
-        let newData = [];
-
-        convertedData.forEach((row) => {
-            let keys = Object.keys(row);
-            row["_type"] = type;
-            // Put _type at the beginning of the JSON object for pretty printing
-            newData.push(JSON.parse(JSON.stringify(row, ["_type", ...keys])));
-        });
-        console.log(newData);
-        setConvertedData(newData);
+        setSettings({ type });
     }
 
     return (
@@ -86,7 +76,7 @@ export default function CSVForm() {
             </section>
             <section className="py-5">
                 <div className="container">
-                    <JSONPreview fileData={convertedData} type={type} />
+                    <JSONPreview fileData={fileData} settings={settings} />
                     <hr className="my-10" />
                 </div>
             </section>
