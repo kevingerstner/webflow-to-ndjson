@@ -6,6 +6,12 @@ import JSONPreview from "./jsonPreview";
 
 export default function CSVForm() {
 
+    /**
+     * NEXT STEPS:
+     * ** Add rename function
+     * ** Ability to remove/add columns from import
+     */
+
     const [fileUpload, setFile] = useState(null);
     const [uploadInfo, setUploadInfo] = useState(null);
     const [uploadErrors, setUploadErrors] = useState(null);
@@ -23,7 +29,6 @@ export default function CSVForm() {
             header: true,
             skipEmptyLines: true,
             complete: function (results) {
-                console.log("FINISHED");
                 setFileData(results.data);
                 setUploadInfo(results.meta);
                 setUploadErrors(results.errors);
@@ -65,7 +70,6 @@ export default function CSVForm() {
             <section className="py-5">
                 <div className="container">
                     <h2>Step 2) View Data:</h2>
-                    <h1>ID Column: {settings?._id}</h1>
                     <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} idColumnHandler={handleChangeIdColumn} />
                 </div>
             </section>
@@ -73,7 +77,7 @@ export default function CSVForm() {
                 <div className="container">
                     <h2>Step 3) Input Info</h2>
                     <form onSubmit={handleTypeSubmit}>
-                        <label className="mr-2">Input the type name for the target Sanity collection: </label>
+                        <label className="mr-2">Input the name of this schema (_type): </label>
                         <input type="text" id="type" name="type" className="border border-gray-400 px-3 py-1 rounded-md" onChange={(e) => { setType(e.target.value) }} /><br />
                         <button type="submit" className="bg-blue-500 rounded-md mt-5 py-2 px-5 text-white font-bold hover:bg-blue-300 transition-colors">Submit</button>
                     </form>
