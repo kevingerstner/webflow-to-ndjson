@@ -12,16 +12,16 @@ export default function JSONPreview({ fileData, settings }) {
     let idCol = settings?._id;
     let convertedData = [];
 
-    console.log("ID", idCol);
-
     // Create the converted preview
     fileData?.slice(0, 10).forEach((row) => {
-        let convertedRow = _.cloneDeep(row);
-        let keys = Object.keys(convertedRow);
-        convertedRow["_id"] = idCol;
+        let convertedRow = _.cloneDeep(row); // make a deep copy of the fileData
+        let headers = Object.keys(convertedRow);
+        let idHeader = headers[idCol];
+        convertedRow["_id"] = convertedRow[idHeader]; // copy value from id col into new col called "_id"
+        delete convertedRow[idHeader]; // delete the col with the original name
         convertedRow["_type"] = type;
-        // Put _type at the beginning of the JSON object for pretty printing
-        convertedData.push(JSON.parse(JSON.stringify(convertedRow, ["_id", "_type", ...keys])));
+        // Put _id and _type at the beginning of the JSON object for pretty printing
+        convertedData.push(JSON.parse(JSON.stringify(convertedRow, ["_id", "_type", ...headers])));
     });
 
     useEffect(() => {

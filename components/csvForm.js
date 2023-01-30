@@ -1,7 +1,7 @@
 import FilePreview from "../components/filePreview";
 import DropZone from "../components/dropZone";
 import { parse } from "papaparse";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState } from "react";
 import JSONPreview from "./jsonPreview";
 
 export default function CSVForm() {
@@ -11,9 +11,8 @@ export default function CSVForm() {
     const [uploadErrors, setUploadErrors] = useState(null);
     const [fileData, setFileData] = useState(null);
 
-    const [settings, setSettings] = useState("");
+    const [settings, setSettings] = useState({ _id: 0, _type: "" });
     const [type, setType] = useState(""); // the _type field for Sanity (the name)
-    const [idColumn, setIdColumn] = useState(0); // the column containing the document ID
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
@@ -24,6 +23,7 @@ export default function CSVForm() {
             header: true,
             skipEmptyLines: true,
             complete: function (results) {
+                console.log("FINISHED");
                 setFileData(results.data);
                 setUploadInfo(results.meta);
                 setUploadErrors(results.errors);
@@ -65,7 +65,7 @@ export default function CSVForm() {
             <section className="py-5">
                 <div className="container">
                     <h2>Step 2) View Data:</h2>
-                    <h1>ID Column: {idColumn}</h1>
+                    <h1>ID Column: {settings?._id}</h1>
                     <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} idColumnHandler={handleChangeIdColumn} />
                 </div>
             </section>
