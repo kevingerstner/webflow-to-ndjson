@@ -17,7 +17,7 @@
     @apply text-2xl;
     @apply font-semibold;
     @apply font-sans;
-    @apply pb-5;
+    @apply mb-5;
   }
   .text-overline {
     @apply font-mono;

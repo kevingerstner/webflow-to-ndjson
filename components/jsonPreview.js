@@ -8,20 +8,26 @@ import "prismjs/components/prism-javascript.min";
 export default function JSONPreview({ fileData, settings }) {
 
     let [mode, setMode] = useState("ndjson");
-    let type = settings?._type;
-    let idCol = settings?._id;
+    let type = settings._type;
+    let idCol = settings._id;
     let convertedData = [];
+    let headers = settings.headers;
 
     // Create the converted preview
     fileData?.slice(0, 10).forEach((row) => {
-        let convertedRow = _.cloneDeep(row); // make a deep copy of the fileData
-        let headers = Object.keys(convertedRow);
-        let idHeader = headers[idCol];
-        convertedRow["_id"] = `imported-${type}-${convertedRow[idHeader]}`.toLowerCase(); // copy value from id col into new col called "_id"
-        delete convertedRow[idHeader]; // delete the col with the original name
+        let convertedRow = {};
+        // set _id name
+        convertedRow["_id"] = `imported-${type}-${convertedRow[headers[idCol]]}`.toLowerCase();
+        delete convertedRow[headers[idCol]]; // delete the col with the original name
+        // set _type
         convertedRow["_type"] = type;
-        // Put _id and _type at the beginning of the JSON object for pretty printing
-        convertedData.push(JSON.parse(JSON.stringify(convertedRow, ["_id", "_type", ...headers])));
+        // rename keys
+        let keys = Object.keys(row);
+        let values = Object.values(row);
+        for (let i = 0; i < keys.length; i++) {
+            convertedRow[headers[i]] = values[i];
+        }
+        convertedData.push(convertedRow);
     });
 
     useEffect(() => {
@@ -31,6 +37,7 @@ export default function JSONPreview({ fileData, settings }) {
     // Display the converted preview data in ndjson (output) format
     let ndjsonPreviewString = "";
     convertedData?.forEach((row) => {
+        console.log(row);
         ndjsonPreviewString += (JSON.stringify(row) + "\n");
     })
 

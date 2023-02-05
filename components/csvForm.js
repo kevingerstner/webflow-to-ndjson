@@ -8,8 +8,10 @@ export default function CSVForm() {
 
     /**
      * NEXT STEPS:
-     * ** Add rename function
      * ** Ability to remove/add columns from import
+     * ** Add toolbar with save button and title preview
+     * ** Export to file
+     * ** Date format?
      */
 
     const [fileUpload, setFile] = useState(null);
@@ -17,8 +19,7 @@ export default function CSVForm() {
     const [uploadErrors, setUploadErrors] = useState(null);
     const [fileData, setFileData] = useState(null);
 
-    const [settings, setSettings] = useState({ _id: 0, _type: "" });
-    const [type, setType] = useState(""); // the _type field for Sanity (the name)
+    const [settings, setSettings] = useState({ headers: [], _id: 0, _type: "" });
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
@@ -32,18 +33,23 @@ export default function CSVForm() {
                 setFileData(results.data);
                 setUploadInfo(results.meta);
                 setUploadErrors(results.errors);
+                setSettings({ headers: results.meta.fields, _id: 0, _type: "" });
             }
         });
     }, [setFileData]);
 
-    function handleChangeIdColumn(event) {
-        setSettings({ ...settings, _id: event.target.value })
-    }
-
     // Modify the JSON Converted Data
-    function handleTypeSubmit(event) {
+    function handleSettingsSubmit(event) {
         event.preventDefault();
-        setSettings({ ...settings, _type: type });
+        const elements = event.target.elements;
+
+        let headers = [];
+        elements["header"].forEach((header) => {
+            if (header.value) headers.push(header.value);
+            else headers.push(header.placeholder);
+        })
+
+        setSettings({ ...settings, headers: headers, _type: elements.type.value, _id: elements.idColumn.value });
     }
 
     return (
@@ -69,18 +75,7 @@ export default function CSVForm() {
             </section>
             <section className="py-5">
                 <div className="container">
-                    <h2>Step 2) View Data:</h2>
-                    <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} idColumnHandler={handleChangeIdColumn} />
-                </div>
-            </section>
-            <section className="py-5">
-                <div className="container">
-                    <h2>Step 3) Input Info</h2>
-                    <form onSubmit={handleTypeSubmit}>
-                        <label className="mr-2">Input the name of this schema (_type): </label>
-                        <input type="text" id="type" name="type" className="border border-gray-400 px-3 py-1 rounded-md" onChange={(e) => { setType(e.target.value) }} /><br />
-                        <button type="submit" className="bg-blue-500 rounded-md mt-5 py-2 px-5 text-white font-bold hover:bg-blue-300 transition-colors">Submit</button>
-                    </form>
+                    <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} handleSettingsSubmit={handleSettingsSubmit} />
                 </div>
             </section>
             <section className="py-5">
