@@ -8,10 +8,12 @@ import "prismjs/components/prism-javascript.min";
 export default function JSONPreview({ fileData, settings }) {
 
     let [mode, setMode] = useState("ndjson");
+
     let type = settings._type;
     let idCol = settings._id;
     let convertedData = [];
     let headers = settings.headers;
+    let enabled = settings.enabled;
 
     // Create the converted preview
     fileData?.slice(0, 10).forEach((row) => {
@@ -27,6 +29,12 @@ export default function JSONPreview({ fileData, settings }) {
         for (let i = 0; i < keys.length; i++) {
             convertedRow[headers[i]] = values[i];
         }
+        // delete disabled columns
+        for (let i = 0; i < enabled.length; i++) {
+            if (enabled[i] === false) {
+                delete convertedRow[headers[i]];
+            }
+        }
         convertedData.push(convertedRow);
     });
 
@@ -37,7 +45,6 @@ export default function JSONPreview({ fileData, settings }) {
     // Display the converted preview data in ndjson (output) format
     let ndjsonPreviewString = "";
     convertedData?.forEach((row) => {
-        console.log(row);
         ndjsonPreviewString += (JSON.stringify(row) + "\n");
     })
 

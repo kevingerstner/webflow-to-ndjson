@@ -54,6 +54,16 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 									))
 								}
 							</tr>
+							<tr>
+								<th className="bg-blue-400">Enabled?</th>
+								{
+									headers.map((header) => (
+										<th className='py-1 bg-blue-400'>
+											<input type="checkbox" name="enabled" defaultChecked onChange={settingChanged}></input>
+										</th>
+									))
+								}
+							</tr>
 							<tr className="sticky top-0">
 								<th className="sticky top-0 py-2 bg-amber-100">ID Column</th>
 								{

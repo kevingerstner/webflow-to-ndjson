@@ -19,7 +19,7 @@ export default function CSVForm() {
     const [uploadErrors, setUploadErrors] = useState(null);
     const [fileData, setFileData] = useState(null);
 
-    const [settings, setSettings] = useState({ headers: [], _id: 0, _type: "" });
+    const [settings, setSettings] = useState({ headers: [], enabled: [], _id: 0, _type: "" });
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
@@ -33,7 +33,13 @@ export default function CSVForm() {
                 setFileData(results.data);
                 setUploadInfo(results.meta);
                 setUploadErrors(results.errors);
-                setSettings({ headers: results.meta.fields, _id: 0, _type: "" });
+                let numCols = results.meta.fields.length;
+                setSettings({
+                    headers: results.meta.fields,
+                    enabled: new Array(numCols).fill(true),
+                    _id: 0,
+                    _type: "",
+                });
             }
         });
     }, [setFileData]);
@@ -47,9 +53,14 @@ export default function CSVForm() {
         elements["header"].forEach((header) => {
             if (header.value) headers.push(header.value);
             else headers.push(header.placeholder);
+        });
+
+        let enabled = [];
+        elements["enabled"].forEach((e) => {
+            enabled.push(e.checked);
         })
 
-        setSettings({ ...settings, headers: headers, _type: elements.type.value, _id: elements.idColumn.value });
+        setSettings({ ...settings, headers: headers, enabled: enabled, _type: elements.type.value, _id: elements.idColumn.value });
     }
 
     return (
