@@ -8,14 +8,14 @@ export default function CSVForm() {
 
     /**
      * NEXT STEPS:
-     * ** Ability to remove/add columns from import
+     * ** Visual indication of disabled columns, disallow ID column on disabled column
      * ** Add toolbar with save button and title preview
      * ** Export to file
      * ** Date format?
      */
 
     const [fileUpload, setFile] = useState(null);
-    const [uploadInfo, setUploadInfo] = useState(null);
+    const [fileMeta, setFileMeta] = useState(null);
     const [uploadErrors, setUploadErrors] = useState(null);
     const [fileData, setFileData] = useState(null);
 
@@ -31,7 +31,7 @@ export default function CSVForm() {
             skipEmptyLines: true,
             complete: function (results) {
                 setFileData(results.data);
-                setUploadInfo(results.meta);
+                setFileMeta(results.meta);
                 setUploadErrors(results.errors);
                 let numCols = results.meta.fields.length;
                 setSettings({
@@ -84,17 +84,23 @@ export default function CSVForm() {
                     </div>
                 </div>
             </section>
-            <section className="py-5">
-                <div className="container">
-                    <FilePreview file={fileUpload} fileData={fileData} fileMeta={uploadInfo} handleSettingsSubmit={handleSettingsSubmit} />
-                </div>
-            </section>
-            <section className="py-5">
-                <div className="container">
-                    <JSONPreview fileData={fileData} settings={settings} />
-                    <hr className="my-10" />
-                </div>
-            </section>
+            {
+                fileUpload && fileMeta && (
+                    <>
+                        <section className="py-5">
+                            <div className="container">
+                                <FilePreview file={fileUpload} fileData={fileData} fileMeta={fileMeta} settings={settings} handleSettingsSubmit={handleSettingsSubmit} />
+                            </div>
+                        </section>
+                        <section className="py-5">
+                            <div className="container">
+                                <JSONPreview fileData={fileData} settings={settings} />
+                                <hr className="my-10" />
+                            </div>
+                        </section>
+                    </>
+                )
+            }
         </>
     )
 }

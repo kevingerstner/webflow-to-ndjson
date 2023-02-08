@@ -4,10 +4,11 @@ import SaveButton from './saveButton';
 import { useState } from 'react';
 
 export default function FilePreview({ file, fileData, fileMeta, handleSettingsSubmit }) {
+
 	const [saved, setSaved] = useState(false);
+	const [enabled, setEnabled] = useState(new Array(fileMeta.fields.length).fill(true)); // stores which columns are disabled
 
 	const fileDataPreview = fileData?.slice(0, 50);
-	const headers = fileMeta?.fields;
 
 	function submit(event) {
 		setSaved(true);
@@ -16,6 +17,13 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 
 	function settingChanged(event) {
 		setSaved(false);
+	}
+
+	function enabledChanged(event, index) {
+		let newEnabled = [...enabled];
+		newEnabled[index] = event.target.checked;
+		setEnabled(newEnabled);
+		settingChanged(event);
 	}
 
 	return (
@@ -32,7 +40,7 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 			</div>
 
 			{
-				fileData && file && (
+				fileDataPreview && file && (
 					<p className=" py-5 font-bold text-lg whitespace-nowrap">Showing {fileDataPreview.length}/50 rows ({file.name})</p>
 				)
 			}
@@ -41,11 +49,12 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 				{fileData && (
 					<table>
 						<thead className="sticky top-0">
+							{/* Header Row */}
 							<tr>
 								<th className="bg-blue-500 text-white text-lg font-bold sticky top-0 py-1 px-5">{file.name}</th>
 								{
-									headers.map((header, index) => (
-										<th key={index} className="bg-blue-500 text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap">
+									fileMeta.fields.map((header, index) => (
+										<th key={index} className={`${enabled[index] ? "bg-blue-500" : "bg-blue-600"} text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap`}>
 											<input type="text" name="header" placeholder={header} className="border-b-2 border-white bg-transparent placeholder:text-gray-300" onChange={settingChanged}></input>
 											<div className="text-xs inline ml-3">
 												<FontAwesomeIcon icon={faPencil} />
@@ -54,21 +63,23 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 									))
 								}
 							</tr>
+							{/* Enabled Row */}
 							<tr>
-								<th className="bg-blue-400">Enabled?</th>
+								<th className="bg-blue-500">Enabled?</th>
 								{
-									headers.map((header) => (
-										<th className='py-1 bg-blue-400'>
-											<input type="checkbox" name="enabled" defaultChecked onChange={settingChanged}></input>
+									fileMeta.fields.map((header, index) => (
+										<th className={`${enabled[index] ? "bg-blue-500" : "bg-blue-600"} py-1`}>
+											<input type="checkbox" name="enabled" defaultChecked onChange={(event) => enabledChanged(event, index)}></input>
 										</th>
 									))
 								}
 							</tr>
+							{/* ID Column Row */}
 							<tr className="sticky top-0">
-								<th className="sticky top-0 py-2 bg-amber-100">ID Column</th>
+								<th className="sticky top-0 py-2 bg-slate-200">ID Column</th>
 								{
-									headers.map((header, index) => (
-										<th className="sticky top-0 py-2 bg-amber-100" key={index}>
+									fileMeta.fields.map((header, index) => (
+										<th className={`${enabled[index] ? "bg-slate-200" : "bg-slate-300"} sticky top-0 py-2`} key={index}>
 											<label htmlFor={header}></label>
 											<input type="radio" id={header} defaultChecked={index === 0} name="idColumn" value={index} onChange={settingChanged}></input>
 										</th>
@@ -80,16 +91,14 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 							{
 								fileDataPreview.map((row, index) => {
 									return (
-										<tr key={index} className="bg-white border-gray-400 border">
+										<tr key={index} className={`bg-white border-gray-400 border`}>
 											<td className="border-gray-200 border px-5 py-1"></td>
 											{
-												Object.keys(row).map((key, index) => {
-													return (
-														<td key={index} className="border-gray-200 border px-5 py-1">
-															{row[key]}
-														</td>
-													)
-												})
+												Object.keys(row).map((key, index) => (
+													<td key={index} className={`${enabled[index] ? "bg-white" : "bg-slate-100"} border-gray-200 border px-5 py-1`}>
+														{row[key]}
+													</td>
+												))
 											}
 										</tr>
 									)
