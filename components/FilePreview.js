@@ -1,12 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import SaveButton from './saveButton';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
-export default function FilePreview({ file, fileData, fileMeta, handleSettingsSubmit }) {
+export default function FilePreview({ file, fileData, fileMeta, settings, handleSettingsSubmit }) {
 
 	const [saved, setSaved] = useState(false);
 	const [enabled, setEnabled] = useState(new Array(fileMeta.fields.length).fill(true)); // stores which columns are disabled
+	const [idColumn, setIdColumn] = useState(0); // stores which column is selected as the id column
+	const formRef = useRef(null);
 
 	const fileDataPreview = fileData?.slice(0, 50);
 
@@ -15,19 +17,40 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 		handleSettingsSubmit(event);
 	}
 
-	function settingChanged(event) {
-		setSaved(false);
+	const settingChanged = (event) => { setSaved(false); }
+
+	function idColumnChanged(event, index) {
+		setIdColumn(index);
+		settingChanged(event);
 	}
 
 	function enabledChanged(event, index) {
+		// Prevent every column from being disabled
+		if (enabled.filter(e => e === true).length <= 1 && event.target.checked === false) {
+			alert("Can't disable every column");
+			event.target.checked = !event.target.checked; // revert check
+			return;
+		};
+		// Set the enabled array
 		let newEnabled = [...enabled];
 		newEnabled[index] = event.target.checked;
 		setEnabled(newEnabled);
+		// Move the ID Column if the column gets disabled
+		const idColumnRefs = formRef.current.elements["idColumn"];
+		if (idColumn === index) {
+			for (let i = 0; i < newEnabled.length; i++) {
+				if (newEnabled[i]) {
+					idColumnRefs[i].checked = true;
+					setIdColumn(i);
+					break;
+				}
+			}
+		}
 		settingChanged(event);
 	}
 
 	return (
-		<form onSubmit={submit}>
+		<form onSubmit={submit} ref={formRef}>
 			<section className='py-10'>
 				<h2>Step 2) Enter the name of the schema</h2>
 				<label className="mr-2">Input the name of this schema (_type): </label>
@@ -81,7 +104,7 @@ export default function FilePreview({ file, fileData, fileMeta, handleSettingsSu
 									fileMeta.fields.map((header, index) => (
 										<th className={`${enabled[index] ? "bg-slate-200" : "bg-slate-300"} sticky top-0 py-2`} key={index}>
 											<label htmlFor={header}></label>
-											<input type="radio" id={header} defaultChecked={index === 0} name="idColumn" value={index} onChange={settingChanged}></input>
+											<input type="radio" id={header} disabled={!enabled[index]} defaultChecked={index === 0} name="idColumn" value={index} onChange={event => idColumnChanged(event, index)}></input>
 										</th>
 									))
 								}

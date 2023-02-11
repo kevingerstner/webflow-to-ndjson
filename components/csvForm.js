@@ -8,7 +8,6 @@ export default function CSVForm() {
 
     /**
      * NEXT STEPS:
-     * ** Visual indication of disabled columns, disallow ID column on disabled column
      * ** Add toolbar with save button and title preview
      * ** Export to file
      * ** Date format?
