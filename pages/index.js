@@ -11,13 +11,11 @@ export default function Index() {
 				<meta name="description" content="Convert CSV files to a NDJSON format for Sanity." />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link rel="icon" href="/wellflow-04.png" />
+				<link rel="stylesheet" href="https://use.typekit.net/vcv7zxu.css"></link>
 			</Head>
-			<main>
+			<main className="min-h-screen">
 				<Navbar />
 				<CSVForm />
-				<div className="container relative flex justify-center py-10">
-					<Image src="/wellflow-05.png" width="300" height="600" alt="well" />
-				</div>
 			</main>
 		</>
 	);

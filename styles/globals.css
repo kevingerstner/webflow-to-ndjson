@@ -11,12 +11,13 @@
   }
   h1 {
     @apply font-display;
-    @apply text-5xl;
+    @apply text-8xl;
+    @apply text-purple-400;
   }
   h2 {
-    @apply text-2xl;
-    @apply font-semibold;
-    @apply font-sans;
+    @apply text-4xl;
+    @apply font-extralight;
+    @apply font-display;
     @apply mb-5;
   }
   .text-overline {

@@ -17,11 +17,11 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 		handleSettingsSubmit(event);
 	}
 
-	const settingChanged = (event) => { setSaved(false); }
+	const settingChanged = () => { setSaved(false); }
 
 	function idColumnChanged(event, index) {
 		setIdColumn(index);
-		settingChanged(event);
+		settingChanged();
 	}
 
 	function enabledChanged(event, index) {
@@ -46,38 +46,34 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 				}
 			}
 		}
-		settingChanged(event);
+		settingChanged();
 	}
 
 	return (
 		<form onSubmit={submit} ref={formRef}>
-			<section className='py-10'>
-				<h2>Step 2) Enter the name of the schema</h2>
-				<label className="mr-2">Input the name of this schema (_type): </label>
-				<input type="text" id="type" name="type" className="border border-gray-400 px-3 py-1 rounded-md" onChange={settingChanged} />
-			</section>
-
 			<div className='flex justify-between items-center mb-5'>
-				<h2 className="m-0">Step 3) Preview and Edit Data:</h2>
+				<h2 className="m-0">Step 2) Preview and Edit Data:</h2>
 				<SaveButton saved={saved} />
 			</div>
 
-			{
-				fileDataPreview && file && (
-					<p className=" py-5 font-bold text-lg whitespace-nowrap">Showing {fileDataPreview.length}/50 rows ({file.name})</p>
-				)
-			}
+			<div className='py-5'>
+				<label className="mr-2">Name of this schema (_type): </label>
+				<input type="text" id="type" name="type" className="border border-white px-3 py-1 rounded-md" onChange={settingChanged} placeholder="Stinkbug" />
+			</div>
 
-			<div className=" border-blue-500 border rounded-lg overflow-scroll h-[80vh]">
+			<div className=" border-white border rounded-lg overflow-scroll h-[80vh]">
 				{fileData && (
 					<table>
 						<thead className="sticky top-0">
 							{/* Header Row */}
 							<tr>
-								<th className="bg-blue-500 text-white text-lg font-bold sticky top-0 py-1 px-5">{file.name}</th>
+								<th className="bg-purple-400 text-white text-lg font-bold sticky top-0 py-2 px-5 whitespace-nowrap text-left leading-4">
+									{file.name}<br />
+									<span className="text-sm">Showing {fileDataPreview.length}/10 rows</span>
+								</th>
 								{
 									fileMeta.fields.map((header, index) => (
-										<th key={index} className={`${enabled[index] ? "bg-blue-500" : "bg-blue-600"} text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap`}>
+										<th key={index} className={`${enabled[index] ? "bg-purple-400" : "bg-purple-600"} text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap`}>
 											<input type="text" name="header" placeholder={header} className="border-b-2 border-white bg-transparent placeholder:text-gray-300" onChange={settingChanged}></input>
 											<div className="text-xs inline ml-3">
 												<FontAwesomeIcon icon={faPencil} />
@@ -88,10 +84,10 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 							</tr>
 							{/* Enabled Row */}
 							<tr>
-								<th className="bg-blue-500">Enabled?</th>
+								<th className="bg-indigo-400">Enabled?</th>
 								{
 									fileMeta.fields.map((header, index) => (
-										<th className={`${enabled[index] ? "bg-blue-500" : "bg-blue-600"} py-1`}>
+										<th className={`${enabled[index] ? " bg-indigo-400" : "bg-indigo-500"} py-1`} key={index}>
 											<input type="checkbox" name="enabled" defaultChecked onChange={(event) => enabledChanged(event, index)}></input>
 										</th>
 									))
@@ -99,7 +95,7 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 							</tr>
 							{/* ID Column Row */}
 							<tr className="sticky top-0">
-								<th className="sticky top-0 py-2 bg-slate-200">ID Column</th>
+								<th className="sticky top-0 py-2 bg-slate-200">_id Column</th>
 								{
 									fileMeta.fields.map((header, index) => (
 										<th className={`${enabled[index] ? "bg-slate-200" : "bg-slate-300"} sticky top-0 py-2`} key={index}>

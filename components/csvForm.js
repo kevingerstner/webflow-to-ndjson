@@ -65,22 +65,20 @@ export default function CSVForm() {
     return (
         <>
             <section className="container pt-20">
-                <div className="grid grid-cols-2 gap-x-20">
-                    <div>
-                        <p className="text-overline">Weblow CMS</p>
-                        <h1 className="mb-3">Webflow CMS to Sanity CMS</h1>
-                        <p className="text-xl mb-6 text-gray-400">Converts .csv to .ndjson</p>
-                        <div className="max-w-2xl">
-                            <p>Want to move your data from a Webflow CMS to a headless CMS like Sanity? This tool will convert Webflow's exported .csv file to .ndjson, the supported file format for Sanity. </p>
-                        </div>
+                <div>
+                    <h1 className="mb-5">Webflow to Sanity</h1>
+                    <div className="max-w-2xl">
+                        <p>Want to move your data from a Webflow CMS to a headless CMS like Sanity? This tool will convert Webflow's exported .csv file to .ndjson, the supported file format for Sanity. </p>
+                    </div>
 
-                    </div>
-                    <div>
-                        <h2>Step 1) Upload CSV File:</h2>
-                        <form className="pb-10">
-                            <DropZone handler={handleFileChosen} />
-                        </form>
-                    </div>
+                </div>
+            </section>
+            <section className="py-20">
+                <div className="container">
+                    <h2>Step 1) Upload CSV File:</h2>
+                    <form className="pb-10">
+                        <DropZone handler={handleFileChosen} />
+                    </form>
                 </div>
             </section>
             {
