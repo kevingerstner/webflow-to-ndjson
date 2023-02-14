@@ -48,6 +48,12 @@ export default function CSVForm() {
         event.preventDefault();
         const elements = event.target.elements;
 
+        let idCols = document.getElementsByName("idColumn");
+        let _id = 0;
+        for (let i = 0; i < idCols.length; i++) {
+            if (idCols[i].checked) _id = i;
+        }
+
         let headers = [];
         elements["header"].forEach((header) => {
             if (header.value) headers.push(header.value);
@@ -59,7 +65,7 @@ export default function CSVForm() {
             enabled.push(e.checked);
         })
 
-        setSettings({ ...settings, headers: headers, enabled: enabled, _type: elements.type.value, _id: elements.idColumn.value });
+        setSettings({ ...settings, headers, enabled, _type: elements.type.value, _id });
     }
 
     return (
@@ -76,7 +82,7 @@ export default function CSVForm() {
             <section className="py-20">
                 <div className="container">
                     <h2>Step 1) Upload CSV File:</h2>
-                    <form className="pb-10">
+                    <form id="csv-form" className="pb-10">
                         <DropZone handler={handleFileChosen} />
                     </form>
                 </div>

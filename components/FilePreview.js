@@ -21,7 +21,7 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 
 	function idColumnChanged(event, index) {
 		setIdColumn(index);
-		settingChanged();
+		setSaved(false);
 	}
 
 	function enabledChanged(event, index) {
@@ -58,7 +58,7 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 
 			<div className='py-5'>
 				<label className="mr-2">Name of this schema (_type): </label>
-				<input type="text" id="type" name="type" className="border border-white px-3 py-1 rounded-md" onChange={settingChanged} placeholder="Stinkbug" />
+				<input type="text" id="type" name="type" className="border border-gray-400 px-5 py-3 rounded-md" onChange={settingChanged} placeholder="Stinkbug" />
 			</div>
 
 			<div className=" border-white border rounded-lg overflow-scroll h-[80vh]">
@@ -67,13 +67,13 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 						<thead className="sticky top-0">
 							{/* Header Row */}
 							<tr>
-								<th className="bg-purple-400 text-white text-lg font-bold sticky top-0 py-2 px-5 whitespace-nowrap text-left leading-4">
+								<th className="bg-primary-400 text-white text-lg font-bold sticky top-0 py-2 px-5 whitespace-nowrap text-left leading-4">
 									{file.name}<br />
 									<span className="text-sm">Showing {fileDataPreview.length}/10 rows</span>
 								</th>
 								{
 									fileMeta.fields.map((header, index) => (
-										<th key={index} className={`${enabled[index] ? "bg-purple-400" : "bg-purple-600"} text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap`}>
+										<th key={index} className={`${enabled[index] ? "bg-primary-400" : "bg-primary-600"} text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap`}>
 											<input type="text" name="header" placeholder={header} className="border-b-2 border-white bg-transparent placeholder:text-gray-300" onChange={settingChanged}></input>
 											<div className="text-xs inline ml-3">
 												<FontAwesomeIcon icon={faPencil} />
@@ -84,10 +84,10 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 							</tr>
 							{/* Enabled Row */}
 							<tr>
-								<th className="bg-indigo-400">Enabled?</th>
+								<th className="bg-primary-400">Enabled?</th>
 								{
 									fileMeta.fields.map((header, index) => (
-										<th className={`${enabled[index] ? " bg-indigo-400" : "bg-indigo-500"} py-1`} key={index}>
+										<th className={`${enabled[index] ? " bg-primary-400" : "bg-primary-600"} py-1`} key={index}>
 											<input type="checkbox" name="enabled" defaultChecked onChange={(event) => enabledChanged(event, index)}></input>
 										</th>
 									))
@@ -95,10 +95,10 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 							</tr>
 							{/* ID Column Row */}
 							<tr className="sticky top-0">
-								<th className="sticky top-0 py-2 bg-slate-200">_id Column</th>
+								<th className="sticky top-0 py-2 bg-gray-200">_id Column</th>
 								{
 									fileMeta.fields.map((header, index) => (
-										<th className={`${enabled[index] ? "bg-slate-200" : "bg-slate-300"} sticky top-0 py-2`} key={index}>
+										<th className={`${enabled[index] ? "bg-gray-200" : "bg-gray-300"} sticky top-0 py-2`} key={index}>
 											<label htmlFor={header}></label>
 											<input type="radio" id={header} disabled={!enabled[index]} defaultChecked={index === 0} name="idColumn" value={index} onChange={event => idColumnChanged(event, index)}></input>
 										</th>
@@ -114,7 +114,7 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 											<td className="border-gray-200 border px-5 py-1"></td>
 											{
 												Object.keys(row).map((key, index) => (
-													<td key={index} className={`${enabled[index] ? "bg-white" : "bg-slate-100"} border-gray-200 border px-5 py-1`}>
+													<td key={index} className={`${enabled[index] ? "bg-white" : "bg-gray-100"} border-gray-200 border px-5 py-1`}>
 														{row[key]}
 													</td>
 												))

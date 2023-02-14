@@ -19,7 +19,7 @@ export default function JSONPreview({ fileData, settings }) {
     fileData?.slice(0, 10).forEach((row) => {
         let convertedRow = {};
         // set _id name
-        convertedRow["_id"] = `imported-${type}-${convertedRow[headers[idCol]]}`.toLowerCase();
+        convertedRow["_id"] = `imported-${type}-${row[headers[idCol]]}`.toLowerCase();
         delete convertedRow[headers[idCol]]; // delete the col with the original name
         // set _type
         convertedRow["_type"] = type;

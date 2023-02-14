@@ -20,10 +20,9 @@ module.exports = {
 			'transparent': "transparent",
 			'white': colors.white,
 			'gray': colors.gray,
-			'beryl': '#c5d6d9',
-			'purple': {
-				400: '#656ee6',
-				600: '#4850c2',
+			'primary': {
+				400: '#87b9ff',
+				600: '#6395db',
 			},
 		},
 		extend: {},
