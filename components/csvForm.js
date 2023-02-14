@@ -4,6 +4,7 @@ import { parse } from "papaparse";
 import { useCallback, useState } from "react";
 import JSONPreview from "./jsonPreview";
 
+
 export default function CSVForm() {
 
     /**
@@ -43,6 +44,15 @@ export default function CSVForm() {
         });
     }, [setFileData]);
 
+    function removeFile(event) {
+        event.preventDefault();
+        setFile(null);
+        setFileMeta(null);
+        setFileData(null);
+
+        console.log("REMOVE FILE");
+    }
+
     // Modify the JSON Converted Data
     function handleSettingsSubmit(event) {
         event.preventDefault();
@@ -81,9 +91,9 @@ export default function CSVForm() {
             </section>
             <section className="py-20">
                 <div className="container">
-                    <h2>Step 1) Upload CSV File:</h2>
-                    <form id="csv-form" className="pb-10">
-                        <DropZone handler={handleFileChosen} />
+                    <h2 className="mb-10">Step 1) Upload CSV File:</h2>
+                    <form id="csv-form" className="mb-10">
+                        <DropZone handler={handleFileChosen} removeHandler={removeFile} file={fileUpload} />
                     </form>
                 </div>
             </section>

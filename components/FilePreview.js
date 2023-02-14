@@ -74,7 +74,7 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 								{
 									fileMeta.fields.map((header, index) => (
 										<th key={index} className={`${enabled[index] ? "bg-primary-400" : "bg-primary-600"} text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap`}>
-											<input type="text" name="header" placeholder={header} className="border-b-2 border-white bg-transparent placeholder:text-gray-300" onChange={settingChanged}></input>
+											<input type="text" name="header" placeholder={header} className="border-b-2 border-white bg-transparent placeholder:text-primary-600" onChange={settingChanged}></input>
 											<div className="text-xs inline ml-3">
 												<FontAwesomeIcon icon={faPencil} />
 											</div>

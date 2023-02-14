@@ -20,9 +20,10 @@ module.exports = {
 			'transparent': "transparent",
 			'white': colors.white,
 			'gray': colors.gray,
+			'red': colors.red,
 			'primary': {
-				400: '#87b9ff',
-				600: '#6395db',
+				400: '#9dcfaa',
+				600: '#52805e',
 			},
 		},
 		extend: {},
