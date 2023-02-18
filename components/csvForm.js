@@ -3,13 +3,12 @@ import DropZone from "../components/dropZone";
 import { parse } from "papaparse";
 import { useCallback, useState } from "react";
 import JSONPreview from "./jsonPreview";
-
+import { saveAs } from "file-saver";
 
 export default function CSVForm() {
 
     /**
      * NEXT STEPS:
-     * ** Add toolbar with save button and title preview
      * ** Export to file
      * ** Date format?
      */
@@ -49,8 +48,6 @@ export default function CSVForm() {
         setFile(null);
         setFileMeta(null);
         setFileData(null);
-
-        console.log("REMOVE FILE");
     }
 
     // Modify the JSON Converted Data
@@ -76,6 +73,35 @@ export default function CSVForm() {
         })
 
         setSettings({ ...settings, headers, enabled, _type: elements.type.value, _id });
+    }
+
+    function download() {
+        // CONVERT
+        let ndjsonOutput = "";
+        let { headers, _id, _type, enabled } = settings;
+
+        fileData?.forEach((row) => {
+            let convertedRow = {};
+            // set _id name
+            convertedRow["_id"] = `imported-${_type}-${row[headers[_id]]}`.toLowerCase();
+            delete convertedRow[headers[_id]]; // delete the col with the original name
+            // set _type
+            convertedRow["_type"] = _type;
+            // rename keys
+            for (let i = 0; i < Object.keys(row).length; i++) {
+                convertedRow[headers[i]] = Object.values(row)[i];
+            }
+            // delete disabled columns
+            for (let i = 0; i < enabled.length; i++) {
+                if (enabled[i] === false) delete convertedRow[headers[i]];
+            }
+            ndjsonOutput += (JSON.stringify(convertedRow) + "\n");
+        });
+
+        // DOWNLOAD
+        let file = new Blob([ndjsonOutput], { type: "text/plain" });
+        let fileName = settings._type + ".ndjson";
+        saveAs(file, fileName);
     }
 
     return (
@@ -109,6 +135,13 @@ export default function CSVForm() {
                             <div className="container">
                                 <JSONPreview fileData={fileData} settings={settings} />
                                 <hr className="my-10" />
+                            </div>
+                        </section>
+                        <section className="py-5">
+                            <div className="container">
+                                <button onClick={download} className="bg-primary-400 text-white px-5 py-3 rounded-md">
+                                    Download
+                                </button>
                             </div>
                         </section>
                     </>

@@ -17,9 +17,9 @@ export default function DropZone({ handler, removeHandler, file }) {
 		<>
 			{
 				file ? (
-					<div className='inline-flex relative'>
-						<p className='mr-10'>File Selected:</p>
-						<div className="border-gray-400 border-2 p-5 rounded-md inline-flex flex-col">
+					<div className=''>
+						<p className='mb-5'>File Selected:</p>
+						<div className="border-gray-400 border-2 p-5 rounded-md inline-flex flex-col relative">
 							<FontAwesomeIcon icon={faFile} size="2x" className='text-primary-400 mb-5' />
 							<span>{file.name}</span>
 							<span className="text-center text-gray-400">{formatBytes(file.size)}</span>
