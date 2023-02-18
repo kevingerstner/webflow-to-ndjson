@@ -28,4 +28,7 @@
     @apply mb-3;
     @apply uppercase;
   }
+  a {
+    @apply underline;
+  }
 }

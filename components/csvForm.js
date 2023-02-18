@@ -9,7 +9,6 @@ export default function CSVForm() {
 
     /**
      * NEXT STEPS:
-     * ** Export to file
      * ** Date format?
      */
 
@@ -109,6 +108,7 @@ export default function CSVForm() {
             <section className="container pt-20">
                 <div>
                     <h1 className="mb-5">Webflow to Sanity</h1>
+                    <p className="mb-5 text-gray-400">Created by <a href="https://github.com/kevingerstner">Kevin Gerstner</a></p>
                     <div className="max-w-2xl">
                         <p>Want to move your data from a Webflow CMS to a headless CMS like Sanity? This tool will convert Webflow's exported .csv file to .ndjson, the supported file format for Sanity. </p>
                     </div>
