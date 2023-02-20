@@ -61,6 +61,15 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 				<input type="text" id="type" name="type" className="border border-gray-400 px-5 py-3 rounded-md" onChange={settingChanged} placeholder="Stinkbug" />
 			</div>
 
+			<div>
+				<p>Tips: </p>
+				<ol>
+					<li>Deselect Collection ID Column</li>
+					<li>Select Item ID as the ID Column</li>
+					<li></li>
+				</ol>
+			</div>
+
 			<div className=" border-white border rounded-lg overflow-scroll h-[80vh]">
 				{fileData && (
 					<table>

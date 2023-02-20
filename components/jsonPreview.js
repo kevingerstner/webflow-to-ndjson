@@ -9,32 +9,27 @@ export default function JSONPreview({ fileData, settings }) {
 
     let [mode, setMode] = useState("ndjson");
 
-    let type = settings._type;
-    let idCol = settings._id;
+    let { _type, _id, headers, enabled } = settings;
     let convertedData = [];
-    let headers = settings.headers;
-    let enabled = settings.enabled;
 
     // Create the converted preview
     fileData?.slice(0, 10).forEach((row) => {
         let convertedRow = {};
         // set _id name
-        convertedRow["_id"] = `imported-${type}-${row[headers[idCol]]}`.toLowerCase();
-        delete convertedRow[headers[idCol]]; // delete the col with the original name
+        convertedRow["_id"] = `imported-${_type}-${row[headers[_id]]}`.toLowerCase();
         // set _type
-        convertedRow["_type"] = type;
+        convertedRow["_type"] = _type;
         // rename keys
-        let keys = Object.keys(row);
-        let values = Object.values(row);
-        for (let i = 0; i < keys.length; i++) {
-            convertedRow[headers[i]] = values[i];
+        for (let i = 0; i < Object.keys(row).length; i++) {
+            convertedRow[headers[i]] = Object.values(row)[i];
         }
         // delete disabled columns
         for (let i = 0; i < enabled.length; i++) {
-            if (enabled[i] === false) {
-                delete convertedRow[headers[i]];
-            }
+            if (enabled[i] === false) delete convertedRow[headers[i]];
         }
+        // delete the col with the original id column
+        delete convertedRow[headers[_id]];
+
         convertedData.push(convertedRow);
     });
 

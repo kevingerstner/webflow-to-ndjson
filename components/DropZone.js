@@ -12,7 +12,6 @@ export default function DropZone({ handler, removeHandler, file }) {
 		return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 	}
 
-	console.log(file);
 	return (
 		<>
 			{

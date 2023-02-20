@@ -11,7 +11,6 @@ export default function Index() {
 				<meta name="description" content="Convert CSV files to a NDJSON format for Sanity." />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link rel="icon" href="/wellflow-04.png" />
-				<link rel="stylesheet" href="https://use.typekit.net/vcv7zxu.css"></link>
 			</Head>
 			<main className="min-h-screen">
 				<Navbar />

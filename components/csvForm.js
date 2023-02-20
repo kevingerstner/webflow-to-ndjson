@@ -9,6 +9,8 @@ export default function CSVForm() {
 
     /**
      * NEXT STEPS:
+     * ** Make sure data is ready for import
+     * ** Ensure ID Column's name is unedited (causing undefined id)
      * ** Date format?
      */
 
@@ -83,7 +85,6 @@ export default function CSVForm() {
             let convertedRow = {};
             // set _id name
             convertedRow["_id"] = `imported-${_type}-${row[headers[_id]]}`.toLowerCase();
-            delete convertedRow[headers[_id]]; // delete the col with the original name
             // set _type
             convertedRow["_type"] = _type;
             // rename keys
@@ -94,6 +95,9 @@ export default function CSVForm() {
             for (let i = 0; i < enabled.length; i++) {
                 if (enabled[i] === false) delete convertedRow[headers[i]];
             }
+            // delete the original id column
+            delete convertedRow[headers[_id]];
+
             ndjsonOutput += (JSON.stringify(convertedRow) + "\n");
         });
 
