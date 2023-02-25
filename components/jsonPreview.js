@@ -4,13 +4,12 @@ import classNames from "classnames";
 import Prism from "prismjs";
 import "prismjs/components/prism-jsx.min";
 import "prismjs/components/prism-javascript.min";
-import { convertFileToJSON, convertHSLAToColor, convertStringToNumber } from "../lib/convert";
+import { convertFileToJSON } from "../lib/convert";
 
 export default function JSONPreview({ fileData, settings }) {
 
     let [mode, setMode] = useState("ndjson");
 
-    let { _type, _id, headers, enabled, types } = settings;
     let convertedData = convertFileToJSON(fileData.slice(0, 10), settings);
 
     // Display the converted preview data in ndjson (output) format

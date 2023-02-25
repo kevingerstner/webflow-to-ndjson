@@ -4,15 +4,12 @@ import { parse } from "papaparse";
 import { useCallback, useState } from "react";
 import JSONPreview from "./jsonPreview";
 import { saveAs } from "file-saver";
-import { convertFileToJSON, convertHSLAToColor, convertStringToNumber, convertStringToSlug } from "../lib/convert";
+import { convertFileToJSON } from "../lib/convert";
 
 export default function CSVForm() {
 
     /**
-     * PREVIOUSLY:
-     * ** bias-import.ndjson is ready to import
      * NEXT STEPS:
-     * ** Import via client into sanity!
      * ** Ensure ID Column's name is unedited (causing undefined id)
      * ** Date format?
      */
@@ -87,12 +84,7 @@ export default function CSVForm() {
 
     function download() {
         // CONVERT
-        let convertedData = convertFileToJSON(fileData, settings);
-
-        let ndjson = "";
-        convertedData?.forEach((row) => {
-            ndjson += (JSON.stringify(row) + "\n");
-        })
+        let ndjson = convertFileToJSON(fileData, settings, true);
 
         // DOWNLOAD
         let downloadEnabled = true;
