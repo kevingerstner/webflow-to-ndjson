@@ -82,7 +82,8 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 								</th>
 								{
 									fileMeta.fields.map((header, index) => (
-										<th key={index} className={`${enabled[index] ? "bg-primary-400" : "bg-primary-600"} text-white text-lg font-bold sticky top-0 py-1 px-5 whitespace-nowrap`}>
+										<th key={index} className={`${enabled[index] ? "bg-primary-400" : "bg-primary-500"} text-white text-lg font-bold sticky top-0 py-1 pl-2 pr-5 whitespace-nowrap`}>
+											<input type="checkbox" name="enabled" defaultChecked onChange={(event) => enabledChanged(event, index)} className="mr-2"></input>
 											<input type="text" name="header" placeholder={header} className="border-b-2 border-white bg-transparent placeholder:text-primary-600" onChange={settingChanged}></input>
 											<div className="text-xs inline ml-3">
 												<FontAwesomeIcon icon={faPencil} />
@@ -91,17 +92,7 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 									))
 								}
 							</tr>
-							{/* Enabled Row */}
-							<tr>
-								<th className="bg-primary-400">Enabled?</th>
-								{
-									fileMeta.fields.map((header, index) => (
-										<th className={`${enabled[index] ? " bg-primary-400" : "bg-primary-600"} py-1`} key={index}>
-											<input type="checkbox" name="enabled" defaultChecked onChange={(event) => enabledChanged(event, index)}></input>
-										</th>
-									))
-								}
-							</tr>
+
 							{/* ID Column Row */}
 							<tr className="sticky top-0">
 								<th className="sticky top-0 py-2 bg-gray-200">_id Column</th>
@@ -114,13 +105,29 @@ export default function FilePreview({ file, fileData, fileMeta, settings, handle
 									))
 								}
 							</tr>
+							{/* Type */}
+							<tr className="sticky top-0">
+								<th className="sticky top-0 py-2 bg-gray-300">Type</th>
+								{
+									fileMeta.fields.map((header, index) => (
+										<th className={`${enabled[index] ? "bg-gray-300" : "bg-gray-400"} sticky top-0 py-2`} key={index}>
+											<select name="types" className="rounded-sm border-2 border-gray-400 w-10/12 px-2 py-1" onChange={settingChanged}>
+												<option value="string">String</option>
+												<option value="color">Color</option>
+												<option value="number">Number</option>
+												<option value="slug">Slug</option>
+											</select>
+										</th>
+									))
+								}
+							</tr>
 						</thead>
 						<tbody>
 							{
 								fileDataPreview.map((row, index) => {
 									return (
 										<tr key={index} className={`bg-white border-gray-400 border`}>
-											<td className="border-gray-200 border px-5 py-1"></td>
+											<td className="border-gray-200 border px-5 py-1 bg-gray-200">{index + 1}</td>
 											{
 												Object.keys(row).map((key, index) => (
 													<td key={index} className={`${enabled[index] ? "bg-white" : "bg-gray-100"} border-gray-200 border px-5 py-1`}>

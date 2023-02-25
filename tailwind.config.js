@@ -22,8 +22,10 @@ module.exports = {
 			'gray': colors.gray,
 			'red': colors.red,
 			'primary': {
+				300: '#c4e2cc',
 				400: '#9dcfaa',
-				600: '#52805e',
+				500: '#8dba99',
+				600: '#6e9177',
 			},
 		},
 		extend: {},

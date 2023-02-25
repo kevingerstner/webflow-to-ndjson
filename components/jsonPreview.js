@@ -4,38 +4,14 @@ import classNames from "classnames";
 import Prism from "prismjs";
 import "prismjs/components/prism-jsx.min";
 import "prismjs/components/prism-javascript.min";
+import { convertFileToJSON, convertHSLAToColor, convertStringToNumber } from "../lib/convert";
 
 export default function JSONPreview({ fileData, settings }) {
 
     let [mode, setMode] = useState("ndjson");
 
-    let { _type, _id, headers, enabled } = settings;
-    let convertedData = [];
-
-    // Create the converted preview
-    fileData?.slice(0, 10).forEach((row) => {
-        let convertedRow = {};
-        // set _id name
-        convertedRow["_id"] = `imported-${_type}-${row[headers[_id]]}`.toLowerCase();
-        // set _type
-        convertedRow["_type"] = _type;
-        // rename keys
-        for (let i = 0; i < Object.keys(row).length; i++) {
-            convertedRow[headers[i]] = Object.values(row)[i];
-        }
-        // delete disabled columns
-        for (let i = 0; i < enabled.length; i++) {
-            if (enabled[i] === false) delete convertedRow[headers[i]];
-        }
-        // delete the col with the original id column
-        delete convertedRow[headers[_id]];
-
-        convertedData.push(convertedRow);
-    });
-
-    useEffect(() => {
-        Prism.highlightAll();
-    }, [fileData, settings, mode]);
+    let { _type, _id, headers, enabled, types } = settings;
+    let convertedData = convertFileToJSON(fileData.slice(0, 10), settings);
 
     // Display the converted preview data in ndjson (output) format
     let ndjsonPreviewString = "";
@@ -48,6 +24,10 @@ export default function JSONPreview({ fileData, settings }) {
     convertedData?.forEach(row => {
         jsonPreviewString += (JSON.stringify(row, null, 2));
     });
+
+    useEffect(() => {
+        Prism.highlightAll();
+    }, [fileData, settings, mode]);
 
     let btnClass = classNames("p-3 rounded-t-lg", {
         "bg-gray-500 text-white": mode === "ndjson",
@@ -66,7 +46,7 @@ export default function JSONPreview({ fileData, settings }) {
 
             <button className={btnClass} onClick={() => { setMode("ndjson") }}>NDJSON (Output)</button>
             <button className={btnClass2} onClick={() => { setMode("json") }}>JSON (Formatted)</button>
-            <pre>
+            <pre className=" max-h-[90vh]">
                 {
                     mode === "ndjson" ? (
                         <code className="language-javascript">

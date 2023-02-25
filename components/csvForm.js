@@ -4,12 +4,15 @@ import { parse } from "papaparse";
 import { useCallback, useState } from "react";
 import JSONPreview from "./jsonPreview";
 import { saveAs } from "file-saver";
+import { convertFileToJSON, convertHSLAToColor, convertStringToNumber, convertStringToSlug } from "../lib/convert";
 
 export default function CSVForm() {
 
     /**
+     * PREVIOUSLY:
+     * ** bias-import.ndjson is ready to import
      * NEXT STEPS:
-     * ** Make sure data is ready for import
+     * ** Import via client into sanity!
      * ** Ensure ID Column's name is unedited (causing undefined id)
      * ** Date format?
      */
@@ -19,7 +22,7 @@ export default function CSVForm() {
     const [uploadErrors, setUploadErrors] = useState(null);
     const [fileData, setFileData] = useState(null);
 
-    const [settings, setSettings] = useState({ headers: [], enabled: [], _id: 0, _type: "" });
+    const [settings, setSettings] = useState({ headers: [], enabled: [], _id: 0, _type: "", types: [] });
 
     const handleFileChosen = useCallback((event) => {
         let file = event.target.files[0];
@@ -39,6 +42,7 @@ export default function CSVForm() {
                     enabled: new Array(numCols).fill(true),
                     _id: 0,
                     _type: "",
+                    types: new Array(numCols).fill("string"),
                 });
             }
         });
@@ -73,38 +77,28 @@ export default function CSVForm() {
             enabled.push(e.checked);
         })
 
-        setSettings({ ...settings, headers, enabled, _type: elements.type.value, _id });
+        let types = [];
+        elements["types"].forEach((e) => {
+            types.push(e.value);
+        })
+
+        setSettings({ ...settings, headers, enabled, _type: elements.type.value, _id, types });
     }
 
     function download() {
         // CONVERT
-        let ndjsonOutput = "";
-        let { headers, _id, _type, enabled } = settings;
+        let convertedData = convertFileToJSON(fileData, settings);
 
-        fileData?.forEach((row) => {
-            let convertedRow = {};
-            // set _id name
-            convertedRow["_id"] = `imported-${_type}-${row[headers[_id]]}`.toLowerCase();
-            // set _type
-            convertedRow["_type"] = _type;
-            // rename keys
-            for (let i = 0; i < Object.keys(row).length; i++) {
-                convertedRow[headers[i]] = Object.values(row)[i];
-            }
-            // delete disabled columns
-            for (let i = 0; i < enabled.length; i++) {
-                if (enabled[i] === false) delete convertedRow[headers[i]];
-            }
-            // delete the original id column
-            delete convertedRow[headers[_id]];
-
-            ndjsonOutput += (JSON.stringify(convertedRow) + "\n");
-        });
+        let ndjson = "";
+        convertedData?.forEach((row) => {
+            ndjson += (JSON.stringify(row) + "\n");
+        })
 
         // DOWNLOAD
-        let file = new Blob([ndjsonOutput], { type: "text/plain" });
+        let downloadEnabled = true;
+        let file = new Blob([ndjson], { type: "text/plain" });
         let fileName = settings._type + ".ndjson";
-        saveAs(file, fileName);
+        downloadEnabled ? saveAs(file, fileName) : null;
     }
 
     return (
