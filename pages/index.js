@@ -2,8 +2,60 @@ import Head from "next/head";
 import Image from "next/image";
 import Navbar from "../components/navbar";
 import CSVForm from "../components/csvForm";
+import Webflow from "webflow-api";
+import { useState } from "react";
+import WebflowSite from "../components/webflowSite";
+import WebflowSiteBrowser from "../components/webflowSiteBrowser";
 
-export default function Index() {
+async function authorize() {
+	console.log("AUTHORIZE");
+	const res = await fetch("/api/authorize", {
+		method: "POST",
+		body: "",
+	});
+	window.location.href = await res.json();
+}
+
+export async function getServerSideProps(context) {
+	console.log(context.query.token);
+	let authToken = context.query.token;
+	if (authToken) {
+		const app = new Webflow({ token: authToken });
+		const { user } = await app.authenticatedUser();
+		let res = await fetch("https://api.webflow.com/user", {
+			method: "GET",
+			headers: { 'Authorization': `Bearer ${authToken}` }
+		});
+		const userInfo = await res.json();
+		let sites = await fetch("https://api.webflow.com/sites", {
+			method: "GET",
+			headers: { 'Authorization': `Bearer ${authToken}` }
+		});
+		const sitesInfo = await sites.json();
+		return {
+			props: {
+				userInfo,
+				sitesInfo,
+			}
+		}
+	}
+	return {
+		props: {}
+	}
+}
+
+export default function Index({ userInfo, sitesInfo }) {
+
+	const [selectedSite, setSelectedSite] = useState(null);
+
+	function selectSite(event, index) {
+		setSelectedSite(index);
+	}
+
+	function deselectSite(event) {
+		setSelectedSite(null);
+	}
+
 	return (
 		<>
 			<Head>
@@ -14,7 +66,31 @@ export default function Index() {
 			</Head>
 			<main className="min-h-screen">
 				<Navbar />
-				<CSVForm />
+				<section className="py-60 bg-black text-white w-full">
+					<div className="container">
+						<h1 className="mb-5">Webflow to Sanity</h1>
+						<div className="max-w-2xl text-xl text-gray-300">
+							<p>Want to move your data from a Webflow CMS to a headless CMS like Sanity? This tool will convert Webflow's exported .csv file to .ndjson, the supported file format for Sanity. </p>
+						</div>
+						<p className="my-5 text-primary-400">Created by <a href="https://github.com/kevingerstner">Kevin Gerstner</a></p>
+						{
+							!userInfo && (
+								<button onClick={authorize} className="bg-primary-400 p-5 my-10 rounded-md flex content-baseline gap-2 text-black">
+									<Image src="/webflow-icon.png" width="22" height="22" alt="Webflow Icon" />
+									Authorize Webflow
+								</button>
+							)
+
+						}
+					</div>
+				</section>
+				{
+					selectedSite !== null ? (
+						<WebflowSite site={sitesInfo[selectedSite]} backHandler={deselectSite} />
+					) : (
+						<WebflowSiteBrowser userInfo={userInfo} sitesInfo={sitesInfo} selectHandler={selectSite} />
+					)
+				}
 			</main>
 		</>
 	);

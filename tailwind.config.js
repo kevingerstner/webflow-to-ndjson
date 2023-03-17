@@ -20,6 +20,7 @@ module.exports = {
 			'transparent': "transparent",
 			'white': colors.white,
 			'gray': colors.gray,
+			'black': colors.black,
 			'red': colors.red,
 			'primary': {
 				300: '#c4e2cc',

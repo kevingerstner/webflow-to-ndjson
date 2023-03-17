@@ -9,10 +9,13 @@
     @apply bg-gray-50;
     @apply text-gray-700;
   }
-  h1 {
+  title {
     @apply font-display;
     @apply text-8xl;
-    @apply text-primary-400;
+  }
+  h1 {
+    @apply font-display;
+    @apply text-7xl;
   }
   h2 {
     @apply text-4xl;
@@ -30,5 +33,11 @@
   }
   a {
     @apply underline;
+  }
+  button {
+    @apply rounded-sm bg-primary-400 px-5 py-3 text-white;
+  }
+  input {
+    @apply my-2 w-full rounded-sm border border-gray-300 py-3 px-5;
   }
 }
