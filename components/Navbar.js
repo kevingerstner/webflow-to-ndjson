@@ -1,13 +1,16 @@
+import { useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import Profile from "./profile";
 
 export default function Navbar({ style = "default" }) {
 
+    const user = useUser();
+
     if (style === "default")
         return (
             <nav className="flex w-full items-center justify-between px-5 py-3 border-b border-gray-200 bg-white">
                 <div>
-                    <a href="/">
+                    <a href={user ? "/dashboard" : "/"}>
                         <Image src="/Wellflow-Logo-01.png" width="200" height="110" alt="Wellflow Logo" />
                     </a>
                 </div>
