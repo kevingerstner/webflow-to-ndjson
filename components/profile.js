@@ -2,8 +2,6 @@ import Image from "next/image";
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from "react";
 import { getUserData } from "../lib/queries";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
 export default function Profile() {
     const user = useUser();
@@ -12,19 +10,15 @@ export default function Profile() {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        console.log("USE EFFECT");
         getProfile();
     }, []);
 
     async function getProfile() {
-        console.log("GET PROFILE");
         try {
             let { data, error, status } = await getUserData(supabase);
             if (error && status !== 406) throw error;
 
             if (data) {
-                console.log(data);
-                console.log(data["first_name"]);
                 setUserData(data);
             }
         } catch (err) { console.log(err) }

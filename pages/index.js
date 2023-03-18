@@ -2,19 +2,11 @@ import Head from "next/head";
 import Image from "next/image";
 import Navbar from "../components/navbar";
 import CSVForm from "../components/csvForm";
+import { useRouter } from "next/router";
 import Webflow from "webflow-api";
 import { useState } from "react";
 import WebflowSite from "../components/webflowSite";
 import WebflowSiteBrowser from "../components/webflowSiteBrowser";
-
-async function authorize() {
-	console.log("AUTHORIZE");
-	const res = await fetch("/api/authorize", {
-		method: "POST",
-		body: "",
-	});
-	window.location.href = await res.json();
-}
 
 export async function getServerSideProps(context) {
 	console.log(context.query.token);
@@ -46,6 +38,9 @@ export async function getServerSideProps(context) {
 
 export default function Index({ userInfo, sitesInfo }) {
 
+	const router = useRouter();
+	console.log(router.query);
+
 	const [selectedSite, setSelectedSite] = useState(null);
 
 	function selectSite(event, index) {
@@ -73,15 +68,6 @@ export default function Index({ userInfo, sitesInfo }) {
 							<p>Want to move your data from a Webflow CMS to a headless CMS like Sanity? This tool will convert Webflow's exported .csv file to .ndjson, the supported file format for Sanity. </p>
 						</div>
 						<p className="my-5 text-primary-400">Created by <a href="https://github.com/kevingerstner">Kevin Gerstner</a></p>
-						{
-							!userInfo && (
-								<button onClick={authorize} className="bg-primary-400 p-5 my-10 rounded-md flex content-baseline gap-2 text-black">
-									<Image src="/webflow-icon.png" width="22" height="22" alt="Webflow Icon" />
-									Authorize Webflow
-								</button>
-							)
-
-						}
 					</div>
 				</section>
 				{

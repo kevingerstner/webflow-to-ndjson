@@ -3,9 +3,6 @@ import Image from "next/image";
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useUser, useSupabaseClient, useSession } from '@supabase/auth-helpers-react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
 import UserInfoCollect from "../components/userInfoCollect";
 import Navbar from "../components/navbar";
 import { getUserData } from "../lib/queries";
@@ -27,7 +24,7 @@ export default function Login() {
                             <Image src="/Wellflow-Logo-02.png" width="300" height="300" alt="Wellflow Logo" />
                         </div>
                         <Auth
-                            redirectTo="http://localhost:3000/login"
+                            redirectTo="https://4c0c-64-82-160-177.ngrok.io/"
                             appearance={{ theme: ThemeSupa }}
                             supabaseClient={supabase}
                             providers={['google', 'facebook', 'twitter']}

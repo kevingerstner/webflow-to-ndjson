@@ -17,11 +17,33 @@
     @apply font-display;
     @apply text-7xl;
   }
+  .h1 {
+    @apply font-display;
+    @apply text-7xl;
+  }
   h2 {
     @apply text-4xl;
     @apply font-extralight;
     @apply font-display;
     @apply mb-5;
+  }
+  .h2 {
+    @apply text-4xl;
+    @apply font-extralight;
+    @apply font-display;
+    @apply mb-5;
+  }
+  h3 {
+    @apply text-2xl;
+    @apply font-bold;
+    @apply font-sans;
+    @apply mb-2;
+  }
+  .h3 {
+    @apply text-2xl;
+    @apply font-bold;
+    @apply font-sans;
+    @apply mb-2;
   }
   .text-overline {
     @apply font-mono;
