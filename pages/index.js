@@ -3,7 +3,6 @@ import Image from "next/image";
 import Navbar from "../components/navbar";
 import CSVForm from "../components/csvForm";
 import { useRouter } from "next/router";
-import Webflow from "webflow-api";
 import { useState } from "react";
 import WebflowSite from "../components/webflowSite";
 import WebflowSiteBrowser from "../components/webflowSiteBrowser";

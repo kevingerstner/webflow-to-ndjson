@@ -31,6 +31,7 @@ export default function Profile() {
 
     async function logout() {
         const { error } = await supabase.auth.signOut();
+        window.location.href = "/";
     }
 
     if (userData) return (
@@ -44,8 +45,8 @@ export default function Profile() {
             {
                 open ? (
                     <>
-                        <div className="absolute top-0 right-0 h-[200%] w-[150%] cursor-pointer"></div>
-                        <ul className="absolute top-12 w-60 bg-white right-0 border overflow-y-auto border-gray-100 py-10 rounded-sm shadow-md">
+                        <div className="absolute top-0 right-0 h-[200%] w-[150%] cursor-pointer z-50"></div>
+                        <ul className="absolute top-12 w-60 bg-white right-0 border overflow-y-auto border-gray-100 py-10 rounded-sm shadow-md z-50">
                             <li className="hover:bg-gray-50 w-full text-center py-2">
                                 <a href="/profile" className="no-underline">
                                     Account
